@@ -8,22 +8,31 @@
     //Create random number from 0 to 2 !!
     //Create switch with 0 means rock, 1 is paper and 2 is scissors !!
 //Check who wins !!
-    //Check is this a tie
-    //If player chose rock 
-        //Each of combinations
-            //If player have scissors
-                //If computer have rock
-                    //Game Failed
-                //If computer have paper
-                    //Game win
-//Start game one more time
+    //Check is this a tie !!!
+    //If player chose rock  !!!
+        //Each of combinations !!!
+            //If player have scissors !!!
+                //If computer have rock !!!
+                    //Game Failed !!!
+                //If computer have paper !!!
+                    //Game win !!!
+//If game is won add score to player, if not to computer !!
+//Start five more times !!
+
+
+
+let gamesPlayed = 0;
+let playerScore = 0;
+let computerScore = 0;
+
 Game();
 function Game(){
-let playerMove = prompt("Pick your move (rock, paper, scissors)");
+if(gamesPlayed < 5){
+let playerMove = prompt(`Pick your move (rock, paper, scissors). It's ${gamesPlayed + 1} game of 5`);
 let computerChoice;
 
 playerMove = playerMove.toLowerCase();
-console.log(playerMove);
+
 if(playerMove === "rock" || playerMove === "paper" || playerMove === "scissors"){
     computerMove();
 }else{
@@ -55,8 +64,11 @@ function computerMove(){
 }
 function checkWhoWins(computerChoice){
     if(playerMove === computerChoice){
-        alert("Its tie! Click ok to play one more time.")
-        Game()
+        computerScore ++;
+        playerScore ++;
+        gamesPlayed ++;
+        alert(`Its tie! Your score is ${playerScore}, and computer score is ${computerScore}. It's ${gamesPlayed} game of 5. To continue click ok.`);
+        Game();
     }else{
         if(playerMove === "rock"){
             if(computerChoice == "scissors"){
@@ -83,11 +95,32 @@ function checkWhoWins(computerChoice){
 
 }
 function winMessage(){
-    alert(`Congratulations! You win! Computer choice was ${computerChoice}. To play one more time click ok.`)
+    playerScore ++;
+    gamesPlayed ++;
+    alert(`Congratulations! You win! Computer choice was ${computerChoice}. Your score is ${playerScore}, and computer score is ${computerScore}. It's ${gamesPlayed} game of 5. To continue click ok.`)
     Game();
 }
 function failMessage(){
-    alert(`Unfortunately you loose! Computer choice was ${computerChoice}. To play one more time click ok.`)
+    computerScore ++;
+    gamesPlayed ++;
+    alert(`Unfortunately you loose! Computer choice was ${computerChoice}. Your score is ${playerScore}, and computer score is ${computerScore}. It's ${gamesPlayed} game of 5. To continue click ok.`)
     Game();
 }
+
+}else{
+    alert(`Game is ended!${whoWinsTheGame(playerScore, computerScore)} Your score is ${playerScore} and computer score is ${computerScore}. To start one more time click ok.`)
+    gamesPlayed = 0;
+    Game();
+}
+console.log(`Player move: ${playerMove}, computer move is ${computerChoice}`)
+}
+
+function whoWinsTheGame(playerScore, computerScore){
+    if(playerScore > computerScore){
+        return "You won the game!";
+    }else if(playerScore < computerScore){
+        return "You lose the game!";
+    }else{
+        return "It's tie!"
+    }
 }
