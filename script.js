@@ -20,42 +20,40 @@
 //Start five more times !!
 
 
+const selectBtn = document.querySelectorAll("#selectBtn");
+const results = document.querySelector("#results");
+
+const scores = document.querySelector("#scores");
+
 
 let gamesPlayed = 0;
 let playerScore = 0;
 let computerScore = 0;
-
-Game();
-function Game(){
-if(gamesPlayed < 5){
-let playerMove = prompt(`Pick your move (rock, paper, scissors). It's ${gamesPlayed + 1} game of 5`);
+let playerChoice;
 let computerChoice;
 
-playerMove = playerMove.toLowerCase();
+updateScores();
+Game();
 
-if(playerMove === "rock" || playerMove === "paper" || playerMove === "scissors"){
-    computerMove();
-}else{
-    alert('Wrong option! Click ok to restart.')
-    Game();
-}
-
+function Game(){
+    selectBtn.forEach(element => {
+        element.addEventListener('click', (e) => {
+            playerChoice = e.target.textContent.toLowerCase();
+            computerMove();
+        });
+    });
 
 function computerMove(){
-    const randomChoice = () => {
-        let choice = Math.random() * 3
-        choice = Math.trunc(choice);
-        return choice;
-    };
+    const randomChoice = () => Math.floor(Math.random() * 3);
     switch(randomChoice()){
         case 0:
-            computerChoice = "rock";
+            computerChoice = "kamień";
         break;
         case 1:
-            computerChoice = "paper";
+            computerChoice = "papier";
         break;
         case 2:
-            computerChoice = "scissors";
+            computerChoice = "nożyce";
         break;
     }
     checkWhoWins(computerChoice)
@@ -63,29 +61,25 @@ function computerMove(){
 
 }
 function checkWhoWins(computerChoice){
-    if(playerMove === computerChoice){
-        computerScore ++;
-        playerScore ++;
-        gamesPlayed ++;
-        alert(`Its tie! Your score is ${playerScore}, and computer score is ${computerScore}. It's ${gamesPlayed} game of 5. To continue click ok.`);
-        Game();
+    if(playerChoice === computerChoice){
+        tieMessage();
     }else{
-        if(playerMove === "rock"){
-            if(computerChoice == "scissors"){
+        if(playerChoice === "kamień"){
+            if(computerChoice == "nożyce"){
                 winMessage();
             }else{
                 failMessage();
             }
         }
-        if(playerMove === "scissors"){
-            if(computerChoice === "paper"){
+        if(playerChoice === "nożyce"){
+            if(computerChoice === "papier"){
                 winMessage();
             }else{
                 failMessage();
             }
         }
-        if(playerMove === "paper"){
-            if(computerChoice == "rock"){
+        if(playerChoice === "papier"){
+            if(computerChoice == "kamień"){
                 winMessage();
             }else{
                 failMessage();
@@ -94,33 +88,55 @@ function checkWhoWins(computerChoice){
     }
 
 }
+function tieMessage(){
+    updateResults("Remis! :|");
+    updateScores();
+    checkWhoWinsGame();
+}
+
 function winMessage(){
     playerScore ++;
-    gamesPlayed ++;
-    alert(`Congratulations! You win! Computer choice was ${computerChoice}. Your score is ${playerScore}, and computer score is ${computerScore}. It's ${gamesPlayed} game of 5. To continue click ok.`)
-    Game();
+    updateResults("Wygrałeś! :)");
+    updateScores();
+    checkWhoWinsGame();
 }
 function failMessage(){
     computerScore ++;
-    gamesPlayed ++;
-    alert(`Unfortunately you loose! Computer choice was ${computerChoice}. Your score is ${playerScore}, and computer score is ${computerScore}. It's ${gamesPlayed} game of 5. To continue click ok.`)
-    Game();
+    updateResults("Przegrałeś! :(");
+    updateScores();
+    checkWhoWinsGame();
 }
 
-}else{
-    alert(`Game is ended!${whoWinsTheGame(playerScore, computerScore)} Your score is ${playerScore} and computer score is ${computerScore}. To start one more time click ok.`)
-    gamesPlayed = 0;
-    Game();
-}
-console.log(`Player move: ${playerMove}, computer move is ${computerChoice}`)
-}
 
-function whoWinsTheGame(playerScore, computerScore){
-    if(playerScore > computerScore){
-        return "You won the game!";
-    }else if(playerScore < computerScore){
-        return "You lose the game!";
-    }else{
-        return "It's tie!"
+
+console.log(`Player move: ${playerChoice}, computer move is ${computerChoice}`)
+}
+function checkWhoWinsGame(){
+    finalPlayerScore = playerScore;
+    finalComputerScore = computerScore;
+
+    if(playerScore >= 5){
+        playerScore = 0;
+        computerScore = 0;
+        updateScores();
+        updateResults("");
+        alert(`Gratulacje wygrałeś grę! Ty zdobyłeś ${finalPlayerScore} punktów, a komputer ${finalComputerScore}. Naciśnij ok aby zacząć od nowa`)
+ 
+    }else if(computerScore >= 5){
+        playerScore = 0;
+        computerScore = 0;
+        updateScores();
+        updateResults("");
+        alert(`Niestety przegrałeś! Ty zdobyłeś ${finalPlayerScore} punktów, a komputer ${finalComputerScore}. Naciśnij ok aby zacząć od nowa`)
+
     }
 }
+
+
+function updateResults(result){
+    results.innerHTML = result;
+}
+
+function updateScores(){
+    scores.innerHTML = `Your score: ${playerScore} <br> Computer score: ${computerScore}`
+};
